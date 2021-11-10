@@ -1,14 +1,6 @@
 pipeline{
-    agent{
-        docker{
-            image 'node:14.18.1-alpine',
-            args '-p 3000:3000'
-        }
-    }
-    environment {
-    CI = 'true'
-    HOME = '.'
-  }
+    agent any
+   
   stages {
     stage('Install Packages') {
       steps {
@@ -30,13 +22,5 @@ pipeline{
       }
     }
 
-stage('Production') {
-  steps {
-    withAWS(region:'Asia Pacific (Sydney) ap-southeast-2',credentials:'CREDENTIALS_FROM_JENKINS_SETUP') {
-    s3Delete(bucket: 'my-single-spa', path:'**/*')
-    s3Upload(bucket: 'my-single-spa', workingDir:'dist', includePathPattern:'**/*');
-            }
-          }
-        }
-    }
+
 }
